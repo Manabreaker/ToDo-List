@@ -10,17 +10,18 @@ $(document).ready(function() {
                     let checked = task.is_completed ? 'checked' : '';
                     let strikeClass = task.is_completed ? 'class="completed-task"' : '';
 
-                    taskList = `
+                    taskList += `
                         <tr id="task-${task.id}" ${strikeClass}>
                             <td>${task.id}</td>
                             <td>${task.title}</td>
                             <td>${task.description}</td>
                             <td>
+                                <button class="btn btn-warning btn-sm edit-task" data-id="${task.id}" data-title="${task.title}" data-description="${task.description}">Edit</button>
                                 <input type="checkbox" class="toggle-status" data-id="${task.id}" ${checked}>
                                 <button class="btn btn-danger btn-sm delete-task" data-id="${task.id}">Delete</button>
                             </td>
                         </tr>
-                    ` + taskList; // Добавляем сверху
+                    `;
                 });
                 $('#taskList').html(taskList);
             },
@@ -97,6 +98,44 @@ $(document).ready(function() {
             },
             error: function() {
                 alert('Failed to update task status');
+            }
+        });
+    });
+
+    // Handle task editing (open modal)
+    $(document).on('click', '.edit-task', function() {
+        let taskId = $(this).data('id');
+        let taskTitle = $(this).data('title');
+        let taskDescription = $(this).data('description');
+
+        $('#editTaskId').val(taskId);
+        $('#editTitle').val(taskTitle);
+        $('#editDescription').val(taskDescription);
+        $('#editTaskModal').modal('show');
+    });
+
+    // Handle task editing (save changes)
+    $('#editTaskForm').on('submit', function(e) {
+        e.preventDefault();
+
+        let taskId = $('#editTaskId').val();
+        let title = $('#editTitle').val();
+        let description = $('#editDescription').val();
+
+        $.ajax({
+            url: `/tasks/${taskId}`,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                title: title,
+                description: description
+            }),
+            success: function() {
+                $('#editTaskModal').modal('hide');
+                loadTasks(); // Reload tasks after update
+            },
+            error: function() {
+                alert('Failed to update task');
             }
         });
     });

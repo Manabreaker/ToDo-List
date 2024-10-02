@@ -1,8 +1,8 @@
 import psycopg2
 
-host = "localhost"  # Хост базы данных
-user = "YOUR_USERNAME"  # Пользователь PostgreSQL
-password = "YOUR_PASSWORD"  # Пароль пользователя PostgreSQL
+host = "YOURHOSTNAME"  # Хост базы данных
+user = "YOURUSERNAME"  # Пользователь PostgreSQL
+password = "YOURPASSWORD"  # Пароль пользователя PostgreSQL
 db_name = "tasks"  # Название базы данных
 
 def get_connection():
@@ -44,3 +44,6 @@ def create_tasks_table():
     except Exception as e:
         print("Error while creating tasks table:", e)
         return False
+
+
+create_tasks_table()

@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-from config import get_connection, create_tasks_table
-import psycopg2
+from config import *
 
 app = Flask(__name__)
 
@@ -149,7 +148,5 @@ def index():
 
 # Запуск приложения
 if __name__ == '__main__':
-    if create_tasks_table():
-        app.run(debug=True)
-    else:
-        print("Failed to create tasks table. Exiting...")
+    app.run(debug=True)
+
